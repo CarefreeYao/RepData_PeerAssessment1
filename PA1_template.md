@@ -1,13 +1,9 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
-```{r load data}
+
+```r
 # Transform the date attribute to an actual date format
 # Load the raw activity data
 setwd('D:/Documents/Graduate\ Report/Coursera/ReproducibleResearch/homework1')
@@ -44,11 +40,10 @@ activity <- data.frame(date=activity_raw$date,
 
 # Clear the workspace
 rm(activity_raw)
-
-
 ```
 ## What is mean total number of steps taken per day?
-```{r Q1-meanTotalNumStep}
+
+```r
 #transform data and rename sum_step
 sum_step=aggregate(activity$step,by =list(activity$date),FUN=sum, na.rm=TRUE)
 names(sum_step)=c("date",'total')
@@ -60,20 +55,23 @@ hist(sum_step$total,
      xlab="Total number of steps", 
      ylim=c(0, 20), 
      main="Histogram of the total number of steps taken each day\n(NA removed)")
+```
 
+![](PA1_template_files/figure-html/Q1-meanTotalNumStep-1.png) 
+
+```r
 #report mean and median
 mean_1=mean(sum_step$total)
 median_1=median(sum_step$total)
-
 ```
-The mean total number of steps taken per day is `r round(mean_1)`.
-The median total number of steps taken per day is `r round(median_1)`.
+The mean total number of steps taken per day is 9354.
+The median total number of steps taken per day is 1.0395\times 10^{4}.
 
 
 
 ## What is the average daily activity pattern?
-```{r Q2-AverageDailyAcPattern}
 
+```r
 rm(sum_step)
 mean_step=aggregate(activity$step,by =list(activity$interval),FUN=mean, na.rm=TRUE)
 names(mean_step)=c("interval",'mean')
@@ -87,18 +85,20 @@ plot(mean_step$interval,
      xlab="Interval [minutes]", 
      ylab="Average number of steps", 
      main="Time-series of the average number of steps per intervals\n(NA removed)")
+```
 
+![](PA1_template_files/figure-html/Q2-AverageDailyAcPattern-1.png) 
+
+```r
 #find the index of the maximum mean and the interval
 max_pos <- which(mean_step$mean == max(mean_step$mean))
 max_interval <- mean_step[max_pos, 1]
 # Clear the workspace
 rm(max_pos, mean_step)
-
-
 ```
 ## Imputing missing values
-```{r Q4-MissingValues}
 
+```r
 NA_total=sum(is.na(activity$step))
 
 
@@ -131,17 +131,20 @@ hist(sum_data$total,
      xlab="Total number of steps", 
      ylim=c(0, 30), 
      main="Histogram of the total number of steps taken each day\n(NA replaced by mean value)")
+```
 
+![](PA1_template_files/figure-html/Q4-MissingValues-1.png) 
+
+```r
 mean2=mean(sum_data$total,na.rm = TRUE)
 median2=median(sum_data$total,na.rm = TRUE)
-
-
 ```
-After filling the missing values, the mean is `r round(mean2)`, and the median is `r round(median2)`. They are different from the original results.
+After filling the missing values, the mean is 1.0766\times 10^{4}, and the median is 1.0766\times 10^{4}. They are different from the original results.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r Q-5 WeekDay-Weekend}
+
+```r
 library(lattice)
 
 # Compute the average number of steps taken, averaged across all daytype variable
@@ -161,9 +164,8 @@ xyplot(mean_data$mean ~ mean_data$interval | daytype, mean_data,
        xlab="Interval", 
        ylab="Number of steps", 
        layout=c(1,2))
-
-
-
 ```
+
+![](PA1_template_files/figure-html/Q-5 WeekDay-Weekend-1.png) 
 
 The patterns look different for the weekend and the weekday.
